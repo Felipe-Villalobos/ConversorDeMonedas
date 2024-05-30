@@ -1,43 +1,115 @@
-import java.util.Scanner;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
 
 public class Principal {
+    // Declaración de componentes gráficos
+    private static JComboBox<String> comboBoxMonedaBase;
+    private static JComboBox<String> comboBoxMonedaDestino;
+    private static JTextField textFieldCantidad;
+    private static HistorialConversiones historialConversiones;
+
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in); // Crear un objeto Scanner para leer la entrada del usuario
-        ConsultaInfoMoneda consultaInfoMoneda = new ConsultaInfoMoneda(); // Crear un objeto para consultar la información de las monedas
-        HistorialConversiones historialConversiones = new HistorialConversiones(); // Crear un objeto para almacenar el historial de conversiones
+        // Configuración de la ventana principal
+        JFrame frame = new JFrame("Conversor de Monedas");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(400, 200);
+        frame.setLayout(new GridLayout(4, 2)); // Cuadrícula de 4 filas y 2 columnas
 
-        System.out.println("Bienvenido al Conversor de Monedas");
+        // Componentes gráficos: etiquetas, menús desplegables, campo de texto y botones
+        JLabel labelMonedaBase = new JLabel("  Moneda Base:");
+        frame.add(labelMonedaBase);
 
-        while (true) { // Loop infinito para permitir conversiones múltiples
-            System.out.println("\nIngrese el código de la moneda base (ej. USD):");
-            String codigoMonedaBase = scanner.nextLine(); // Leer el código de la moneda base ingresado por el usuario
+        comboBoxMonedaBase = new JComboBox<>();
+        frame.add(comboBoxMonedaBase);
 
-            Conversor conversor = consultaInfoMoneda.buscaMoneda(codigoMonedaBase); // Obtener la información de las tasas de cambio para la moneda base ingresada
+        JLabel labelMonedaDestino = new JLabel("  Moneda Destino:");
+        frame.add(labelMonedaDestino);
 
-            if (conversor == null) { // Verificar si se pudo obtener información para la moneda base
-                System.out.println("No se pudo obtener información para la moneda especificada.");
-                continue; // Continuar con la siguiente iteración del bucle
+        comboBoxMonedaDestino = new JComboBox<>();
+        frame.add(comboBoxMonedaDestino);
+
+        JLabel labelCantidad = new JLabel("  Cantidad:");
+        frame.add(labelCantidad);
+
+        textFieldCantidad = new JTextField();
+        frame.add(textFieldCantidad);
+
+        JButton buttonConvertir = new JButton("Convertir");
+        buttonConvertir.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Verificar si el campo de cantidad está vacío
+                if (textFieldCantidad.getText().isEmpty()) {
+                    // Mostrar mensaje de error solicitando ingresar un valor
+                    JOptionPane.showMessageDialog(null, "Por favor, ingresa un valor en el campo de cantidad.", "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    // Si el campo de cantidad no está vacío, realizar la conversión
+                    convertirMoneda();
+                }
             }
+        });
+        frame.add(buttonConvertir);
 
-            System.out.println("Ingrese el código de la moneda a la que desea convertir:");
-            String codigoMonedaDestino = scanner.nextLine(); // Leer el código de la moneda de destino ingresado por el usuario
+        historialConversiones = new HistorialConversiones();
 
-            if (!conversor.getConversionRates().containsKey(codigoMonedaDestino)) { // Verificar si la moneda de destino está disponible en las tasas de cambio obtenidas
-                System.out.println("La moneda de destino especificada no está disponible.");
-                continue; // Continuar con la siguiente iteración del bucle
+        JButton buttonMostrarHistorial = new JButton("Mostrar Historial");
+        buttonMostrarHistorial.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mostrarHistorial();
             }
+        });
+        frame.add(buttonMostrarHistorial);
 
-            System.out.println("Ingrese la cantidad a convertir:");
-            double cantidad = scanner.nextDouble(); // Leer la cantidad a convertir ingresada por el usuario
-            scanner.nextLine(); // Limpiar el buffer del scanner
+        frame.setVisible(true); // Hacer visible la ventana
 
-            double tasaCambio = conversor.getConversionRates().get(codigoMonedaDestino); // Obtener la tasa de cambio para la moneda de destino
-            double resultado = cantidad * tasaCambio; // Calcular el resultado de la conversión
+        inicializarComboBoxMonedas(); // Inicializar los menús desplegables con las monedas disponibles
+    }
 
-            System.out.println(String.format("%.2f %s equivale a %.2f %s", cantidad, codigoMonedaBase, resultado, codigoMonedaDestino)); // Mostrar el resultado de la conversión
+    // Método para inicializar los menús desplegables con las monedas disponibles
+    private static void inicializarComboBoxMonedas() {
+        ConsultaInfoMoneda consultaInfoMoneda = new ConsultaInfoMoneda();
+        Conversor conversor = consultaInfoMoneda.buscaMoneda("USD"); // Obtener tasas de cambio para moneda base predeterminada
 
-            historialConversiones.registrarConversion(codigoMonedaBase, codigoMonedaDestino, cantidad, resultado); // Registrar la conversión en el historial
-            historialConversiones.mostrarHistorial(); // Mostrar el historial de conversiones
+        if (conversor != null) {
+            List<String> monedas = List.copyOf(conversor.getConversionRates().keySet());
+            for (String moneda : monedas) {
+                comboBoxMonedaBase.addItem(moneda); // Agregar moneda al menú desplegable de moneda base
+                comboBoxMonedaDestino.addItem(moneda); // Agregar moneda al menú desplegable de moneda destino
+            }
         }
+    }
+
+    // Método para realizar la conversión de moneda
+    private static void convertirMoneda() {
+        String monedaBase = comboBoxMonedaBase.getSelectedItem().toString(); // Obtener la moneda base seleccionada
+        String monedaDestino = comboBoxMonedaDestino.getSelectedItem().toString(); // Obtener la moneda destino seleccionada
+        double cantidad = Double.parseDouble(textFieldCantidad.getText()); // Obtener la cantidad ingresada por el usuario
+
+        ConsultaInfoMoneda consultaInfoMoneda = new ConsultaInfoMoneda();
+        Conversor conversor = consultaInfoMoneda.buscaMoneda(monedaBase); // Obtener tasas de cambio para la moneda base
+
+        if (conversor != null) {
+            if (conversor.getConversionRates().containsKey(monedaDestino)) {
+                double tasaCambio = conversor.getConversionRates().get(monedaDestino);
+                double resultado = cantidad * tasaCambio;
+
+                JOptionPane.showMessageDialog(null, String.format("%.2f %s equivale a %.2f %s", cantidad, monedaBase, resultado, monedaDestino));
+
+                historialConversiones.registrarConversion(monedaBase, monedaDestino, cantidad, resultado); // Registrar la conversión en el historial
+            } else {
+                JOptionPane.showMessageDialog(null, "La moneda de destino especificada no está disponible.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No se pudo obtener información para la moneda especificada.");
+        }
+    }
+
+    // Método para mostrar el historial de conversiones
+    private static void mostrarHistorial() {
+        historialConversiones.mostrarHistorial();
     }
 }

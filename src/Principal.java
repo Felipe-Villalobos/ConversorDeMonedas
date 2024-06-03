@@ -4,12 +4,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
 import java.util.List;
+
 public class Principal {
     // Declaración de componentes gráficos
     private static JComboBox<String> comboBoxMonedaBase;
     private static JComboBox<String> comboBoxMonedaDestino;
     private static JTextField textFieldCantidad;
     private static HistorialConversiones historialConversiones;
+    private static JTextArea textAreaHistorial; // JTextArea para el historial
 
     // Mapa de asociación del nombre de la moneda
     private static Map<String, String> codigoMonedaMap = new HashMap<>();
@@ -179,36 +181,56 @@ public class Principal {
         codigoMonedaMap.put("Kwacha zambiano (ZMW)", "ZMW");
         codigoMonedaMap.put("Dólar zimbabuense (ZWL)", "ZWL");
 
-
+        // Agrega más monedas según sea necesario
     }
 
     public static void main(String[] args) {
         // Configuración de la ventana principal
         JFrame frame = new JFrame("Conversor de Monedas");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 200);
-        frame.setLayout(new GridLayout(4, 2)); // Cuadrícula de 4 filas y 2 columnas
+        frame.setSize(600, 500);
+        frame.setLayout(new BorderLayout());
+
+        // Crear el panel principal con GridBagLayout
+        JPanel panelPrincipal = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
         // Componentes gráficos: etiquetas, menús desplegables, campo de texto y botones
-        JLabel labelMonedaBase = new JLabel("  Moneda Base:");
-        frame.add(labelMonedaBase);
+        JLabel labelMonedaBase = new JLabel("Moneda Base:");
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        panelPrincipal.add(labelMonedaBase, gbc);
 
         comboBoxMonedaBase = new JComboBox<>();
-        frame.add(comboBoxMonedaBase);
+        gbc.gridx = 1;
+        panelPrincipal.add(comboBoxMonedaBase, gbc);
 
-        JLabel labelMonedaDestino = new JLabel("  Moneda Destino:");
-        frame.add(labelMonedaDestino);
+        JLabel labelMonedaDestino = new JLabel("Moneda Destino:");
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        panelPrincipal.add(labelMonedaDestino, gbc);
 
         comboBoxMonedaDestino = new JComboBox<>();
-        frame.add(comboBoxMonedaDestino);
+        gbc.gridx = 1;
+        panelPrincipal.add(comboBoxMonedaDestino, gbc);
 
-        JLabel labelCantidad = new JLabel("  Cantidad:");
-        frame.add(labelCantidad);
+        JLabel labelCantidad = new JLabel("Cantidad:");
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        panelPrincipal.add(labelCantidad, gbc);
 
         textFieldCantidad = new JTextField();
-        frame.add(textFieldCantidad);
+        gbc.gridx = 1;
+        panelPrincipal.add(textFieldCantidad, gbc);
 
         JButton buttonConvertir = new JButton("Convertir");
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.NONE;
+        // Manejador de eventos para el botón de conversión
         buttonConvertir.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -222,18 +244,49 @@ public class Principal {
                 }
             }
         });
-        frame.add(buttonConvertir);
-
-        historialConversiones = new HistorialConversiones();
+        panelPrincipal.add(buttonConvertir, gbc);
 
         JButton buttonMostrarHistorial = new JButton("Mostrar Historial");
+        gbc.gridy = 4;
+
+        // Manejador de eventos para el botón de historial
         buttonMostrarHistorial.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mostrarHistorial();
+                historialConversiones.mostrarHistorial(); // Mostrar el historial de conversiones
             }
         });
-        frame.add(buttonMostrarHistorial);
+        panelPrincipal.add(buttonMostrarHistorial, gbc);
+
+        // JTextArea y JScrollPane para mostrar el historial
+        textAreaHistorial = new JTextArea(10, 30);
+        textAreaHistorial.setEditable(false); // Para que el usuario no pueda editar el historial
+        JScrollPane scrollPaneHistorial = new JScrollPane(textAreaHistorial); // Agregar el JTextArea dentro de un JScrollPane para permitir desplazamiento
+        gbc.gridy = 5;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        panelPrincipal.add(scrollPaneHistorial, gbc);
+
+        // Inicialización del objeto para manejar el historial de conversiones
+        historialConversiones = new HistorialConversiones(textAreaHistorial);
+
+        // Botón para ocultar el historial
+        JButton buttonOcultarHistorial = new JButton("Ocultar Historial");
+        gbc.gridy = 6;
+
+        // Manejador de eventos para el botón de ocultar historial
+        buttonOcultarHistorial.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Limpiar el JTextArea al hacer clic en el botón
+                textAreaHistorial.setText("");
+            }
+        });
+        panelPrincipal.add(buttonOcultarHistorial, gbc);
+
+        // Agregar el panel principal al frame
+        frame.add(panelPrincipal, BorderLayout.CENTER);
 
         frame.setVisible(true); // Hacer visible la ventana
 
@@ -290,8 +343,4 @@ public class Principal {
         }
     }
 
-    // Método para mostrar el historial de conversiones
-    private static void mostrarHistorial() {
-        historialConversiones.mostrarHistorial();
-    }
 }

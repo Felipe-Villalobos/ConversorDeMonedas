@@ -2,14 +2,185 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.*;
 import java.util.List;
-
 public class Principal {
     // Declaración de componentes gráficos
     private static JComboBox<String> comboBoxMonedaBase;
     private static JComboBox<String> comboBoxMonedaDestino;
     private static JTextField textFieldCantidad;
     private static HistorialConversiones historialConversiones;
+
+    // Mapa de asociación del nombre de la moneda
+    private static Map<String, String> codigoMonedaMap = new HashMap<>();
+
+    static {
+        // Inicializar el mapa con las asociaciones de nombre de moneda y código
+        codigoMonedaMap.put("Dólar estadounidense (USD)", "USD");
+        codigoMonedaMap.put("Dírham de los Emiratos Árabes Unidos (AED)", "AED");
+        codigoMonedaMap.put("Afgani afgano (AFN)", "AFN");
+        codigoMonedaMap.put("Lek albanés (ALL)", "ALL");
+        codigoMonedaMap.put("Dram armenio (AMD)", "AMD");
+        codigoMonedaMap.put("Florín de las Antillas Neerlandesas (ANG)", "ANG");
+        codigoMonedaMap.put("Kwanza angoleño (AOA)", "AOA");
+        codigoMonedaMap.put("Peso argentino (ARS)", "ARS");
+        codigoMonedaMap.put("Dólar australiano (AUD)", "AUD");
+        codigoMonedaMap.put("Florín arubeño (AWG)", "AWG");
+        codigoMonedaMap.put("Manat azerbaiyano (AZN)", "AZN");
+        codigoMonedaMap.put("Marco convertible de Bosnia y Herzegovina (BAM)", "BAM");
+        codigoMonedaMap.put("Dólar de Barbados (BBD)", "BBD");
+        codigoMonedaMap.put("Taka bangladesí (BDT)", "BDT");
+        codigoMonedaMap.put("Lev búlgaro (BGN)", "BGN");
+        codigoMonedaMap.put("Dinar bahreiní (BHD)", "BHD");
+        codigoMonedaMap.put("Franco burundés (BIF)", "BIF");
+        codigoMonedaMap.put("Dólar bermudeño (BMD)", "BMD");
+        codigoMonedaMap.put("Dólar de Brunéi (BND)", "BND");
+        codigoMonedaMap.put("Boliviano boliviano (BOB)", "BOB");
+        codigoMonedaMap.put("Real brasileño (BRL)", "BRL");
+        codigoMonedaMap.put("Dólar bahameño (BSD)", "BSD");
+        codigoMonedaMap.put("Ngultrum butanés (BTN)", "BTN");
+        codigoMonedaMap.put("Pula botsuano (BWP)", "BWP");
+        codigoMonedaMap.put("Rublo bielorruso (BYN)", "BYN");
+        codigoMonedaMap.put("Dólar beliceño (BZD)", "BZD");
+        codigoMonedaMap.put("Dólar canadiense (CAD)", "CAD");
+        codigoMonedaMap.put("Franco congoleño (CDF)", "CDF");
+        codigoMonedaMap.put("Franco suizo (CHF)", "CHF");
+        codigoMonedaMap.put("Peso chileno (CLP)", "CLP");
+        codigoMonedaMap.put("Yuan chino (CNY)", "CNY");
+        codigoMonedaMap.put("Peso colombiano (COP)", "COP");
+        codigoMonedaMap.put("Colón costarricense (CRC)", "CRC");
+        codigoMonedaMap.put("Peso cubano (CUP)", "CUP");
+        codigoMonedaMap.put("Escudo caboverdiano (CVE)", "CVE");
+        codigoMonedaMap.put("Corona checa (CZK)", "CZK");
+        codigoMonedaMap.put("Franco yibutiano (DJF)", "DJF");
+        codigoMonedaMap.put("Corona danesa (DKK)", "DKK");
+        codigoMonedaMap.put("Peso dominicano (DOP)", "DOP");
+        codigoMonedaMap.put("Dinar argelino (DZD)", "DZD");
+        codigoMonedaMap.put("Libra egipcia (EGP)", "EGP");
+        codigoMonedaMap.put("Nakfa eritreo (ERN)", "ERN");
+        codigoMonedaMap.put("Birr etíope (ETB)", "ETB");
+        codigoMonedaMap.put("Euro (EUR)", "EUR");
+        codigoMonedaMap.put("Dólar fiyiano (FJD)", "FJD");
+        codigoMonedaMap.put("Libra malvinense (FKP)", "FKP");
+        codigoMonedaMap.put("Corona feroesa (FOK)", "FOK");
+        codigoMonedaMap.put("Libra esterlina británica (GBP)", "GBP");
+        codigoMonedaMap.put("Lari georgiano (GEL)", "GEL");
+        codigoMonedaMap.put("Libra de Guernsey (GGP)", "GGP");
+        codigoMonedaMap.put("Cedi ghanés (GHS)", "GHS");
+        codigoMonedaMap.put("Libra de Gibraltar (GIP)", "GIP");
+        codigoMonedaMap.put("Dalasi gambiano (GMD)", "GMD");
+        codigoMonedaMap.put("Franco guineano (GNF)", "GNF");
+        codigoMonedaMap.put("Quetzal guatemalteco (GTQ)", "GTQ");
+        codigoMonedaMap.put("Dólar guyanés (GYD)", "GYD");
+        codigoMonedaMap.put("Dólar de Hong Kong (HKD)", "HKD");
+        codigoMonedaMap.put("Lempira hondureño (HNL)", "HNL");
+        codigoMonedaMap.put("Kuna croata (HRK)", "HRK");
+        codigoMonedaMap.put("Gourde haitiano (HTG)", "HTG");
+        codigoMonedaMap.put("Forinto húngaro (HUF)", "HUF");
+        codigoMonedaMap.put("Rupia indonesia (IDR)", "IDR");
+        codigoMonedaMap.put("Nuevo séquel israelí (ILS)", "ILS");
+        codigoMonedaMap.put("Libra de la Isla de Man (IMP)", "IMP");
+        codigoMonedaMap.put("Rupia india (INR)", "INR");
+        codigoMonedaMap.put("Dinar iraquí (IQD)", "IQD");
+        codigoMonedaMap.put("Rial iraní (IRR)", "IRR");
+        codigoMonedaMap.put("Corona islandesa (ISK)", "ISK");
+        codigoMonedaMap.put("Libra de Jersey (JEP)", "JEP");
+        codigoMonedaMap.put("Dólar jamaicano (JMD)", "JMD");
+        codigoMonedaMap.put("Dinar jordano (JOD)", "JOD");
+        codigoMonedaMap.put("Yen japonés (JPY)", "JPY");
+        codigoMonedaMap.put("Chelín keniata (KES)", "KES");
+        codigoMonedaMap.put("Som kirguís (KGS)", "KGS");
+        codigoMonedaMap.put("Riel camboyano (KHR)", "KHR");
+        codigoMonedaMap.put("Dólar de Kiribati (KID)", "KID");
+        codigoMonedaMap.put("Franco comorano (KMF)", "KMF");
+        codigoMonedaMap.put("Won surcoreano (KRW)", "KRW");
+        codigoMonedaMap.put("Dinar kuwaití (KWD)", "KWD");
+        codigoMonedaMap.put("Dólar de las Islas Caimán (KYD)", "KYD");
+        codigoMonedaMap.put("Tenge kazajo (KZT)", "KZT");
+        codigoMonedaMap.put("Kip laosiano (LAK)", "LAK");
+        codigoMonedaMap.put("Libra libanesa (LBP)", "LBP");
+        codigoMonedaMap.put("Rupia de Sri Lanka (LKR)", "LKR");
+        codigoMonedaMap.put("Dólar liberiano (LRD)", "LRD");
+        codigoMonedaMap.put("Loti de Lesoto (LSL)", "LSL");
+        codigoMonedaMap.put("Dinar libio (LYD)", "LYD");
+        codigoMonedaMap.put("Dírham marroquí (MAD)", "MAD");
+        codigoMonedaMap.put("Leu moldavo (MDL)", "MDL");
+        codigoMonedaMap.put("Ariary malgache (MGA)", "MGA");
+        codigoMonedaMap.put("Dinar macedonio (MKD)", "MKD");
+        codigoMonedaMap.put("Kyat birmano (MMK)", "MMK");
+        codigoMonedaMap.put("Tugrik mongol (MNT)", "MNT");
+        codigoMonedaMap.put("Pataca de Macao (MOP)", "MOP");
+        codigoMonedaMap.put("Ouguiya mauritana (MRU)", "MRU");
+        codigoMonedaMap.put("Rupia de Mauricio (MUR)", "MUR");
+        codigoMonedaMap.put("Rufiyaa de Maldivas (MVR)", "MVR");
+        codigoMonedaMap.put("Kwacha malauí (MWK)", "MWK");
+        codigoMonedaMap.put("Peso mexicano (MXN)", "MXN");
+        codigoMonedaMap.put("Ringgit malasio (MYR)", "MYR");
+        codigoMonedaMap.put("Metical mozambiqueño (MZN)", "MZN");
+        codigoMonedaMap.put("Dólar de Namibia (NAD)", "NAD");
+        codigoMonedaMap.put("Naira nigeriano (NGN)", "NGN");
+        codigoMonedaMap.put("Córdoba nicaragüense (NIO)", "NIO");
+        codigoMonedaMap.put("Corona noruega (NOK)", "NOK");
+        codigoMonedaMap.put("Rupia nepalí (NPR)", "NPR");
+        codigoMonedaMap.put("Dólar neozelandés (NZD)", "NZD");
+        codigoMonedaMap.put("Rial omaní (OMR)", "OMR");
+        codigoMonedaMap.put("Balboa panameño (PAB)", "PAB");
+        codigoMonedaMap.put("Sol peruano (PEN)", "PEN");
+        codigoMonedaMap.put("Kina de Papúa Nueva Guinea (PGK)", "PGK");
+        codigoMonedaMap.put("Peso filipino (PHP)", "PHP");
+        codigoMonedaMap.put("Rupia paquistaní (PKR)", "PKR");
+        codigoMonedaMap.put("Zloty polaco (PLN)", "PLN");
+        codigoMonedaMap.put("Guaraní paraguayo (PYG)", "PYG");
+        codigoMonedaMap.put("Rial qatarí (QAR)", "QAR");
+        codigoMonedaMap.put("Leu rumano (RON)", "RON");
+        codigoMonedaMap.put("Dinar serbio (RSD)", "RSD");
+        codigoMonedaMap.put("Rublo ruso (RUB)", "RUB");
+        codigoMonedaMap.put("Franco ruandés (RWF)", "RWF");
+        codigoMonedaMap.put("Riyal saudita (SAR)", "SAR");
+        codigoMonedaMap.put("Dólar de las Islas Salomón (SBD)", "SBD");
+        codigoMonedaMap.put("Rupia seychelense (SCR)", "SCR");
+        codigoMonedaMap.put("Libra sudanesa (SDG)", "SDG");
+        codigoMonedaMap.put("Corona sueca (SEK)", "SEK");
+        codigoMonedaMap.put("Dólar singapurense (SGD)", "SGD");
+        codigoMonedaMap.put("Libra de Santa Elena (SHP)", "SHP");
+        codigoMonedaMap.put("Leone de Sierra Leona (SLE)", "SLE");
+        codigoMonedaMap.put("Leone de Sierra Leona (SLL)", "SLL");
+        codigoMonedaMap.put("Chelín somalí (SOS)", "SOS");
+        codigoMonedaMap.put("Dólar surinamés (SRD)", "SRD");
+        codigoMonedaMap.put("Libra sursudanesa (SSP)", "SSP");
+        codigoMonedaMap.put("Dobra santotomense (STN)", "STN");
+        codigoMonedaMap.put("Libra siria (SYP)", "SYP");
+        codigoMonedaMap.put("Lilangeni de Suazilandia (SZL)", "SZL");
+        codigoMonedaMap.put("Baht tailandés (THB)", "THB");
+        codigoMonedaMap.put("Somoni tayiko (TJS)", "TJS");
+        codigoMonedaMap.put("Manat turcomano (TMT)", "TMT");
+        codigoMonedaMap.put("Dinar tunecino (TND)", "TND");
+        codigoMonedaMap.put("Pa'anga tongano (TOP)", "TOP");
+        codigoMonedaMap.put("Lira turca (TRY)", "TRY");
+        codigoMonedaMap.put("Dólar de Trinidad y Tobago (TTD)", "TTD");
+        codigoMonedaMap.put("Dólar de Tuvalu (TVD)", "TVD");
+        codigoMonedaMap.put("Nuevo dólar taiwanés (TWD)", "TWD");
+        codigoMonedaMap.put("Chelín tanzano (TZS)", "TZS");
+        codigoMonedaMap.put("Grivna ucraniana (UAH)", "UAH");
+        codigoMonedaMap.put("Chelín ugandés (UGX)", "UGX");
+        codigoMonedaMap.put("Peso uruguayo (UYU)", "UYU");
+        codigoMonedaMap.put("Som uzbeko (UZS)", "UZS");
+        codigoMonedaMap.put("Bolívar venezolano (VES)", "VES");
+        codigoMonedaMap.put("Dong vietnamita (VND)", "VND");
+        codigoMonedaMap.put("Vatu vanuatuense (VUV)", "VUV");
+        codigoMonedaMap.put("Tala samoano (WST)", "WST");
+        codigoMonedaMap.put("Franco CFA de África Central (XAF)", "XAF");
+        codigoMonedaMap.put("Dólar del Caribe Oriental (XCD)", "XCD");
+        codigoMonedaMap.put("Derechos especiales de giro (XDR)", "XDR");
+        codigoMonedaMap.put("Franco CFA de África Occidental (XOF)", "XOF");
+        codigoMonedaMap.put("Franco CFP (XPF)", "XPF");
+        codigoMonedaMap.put("Rial yemení (YER)", "YER");
+        codigoMonedaMap.put("Rand sudafricano (ZAR)", "ZAR");
+        codigoMonedaMap.put("Kwacha zambiano (ZMW)", "ZMW");
+        codigoMonedaMap.put("Dólar zimbabuense (ZWL)", "ZWL");
+
+
+    }
 
     public static void main(String[] args) {
         // Configuración de la ventana principal
@@ -71,16 +242,24 @@ public class Principal {
 
     // Método para inicializar los menús desplegables con las monedas disponibles
     private static void inicializarComboBoxMonedas() {
-        ConsultaInfoMoneda consultaInfoMoneda = new ConsultaInfoMoneda();
-        Conversor conversor = consultaInfoMoneda.buscaMoneda("USD"); // Obtener tasas de cambio para moneda base predeterminada
+        // Crear una lista ordenada alfabéticamente de las claves del mapa
+        List<String> monedasOrdenadas = new ArrayList<>(codigoMonedaMap.keySet());
+        Collections.sort(monedasOrdenadas);
 
-        if (conversor != null) {
-            List<String> monedas = List.copyOf(conversor.getConversionRates().keySet());
-            for (String moneda : monedas) {
-                comboBoxMonedaBase.addItem(moneda); // Agregar moneda al menú desplegable de moneda base
-                comboBoxMonedaDestino.addItem(moneda); // Agregar moneda al menú desplegable de moneda destino
-            }
+        // Limpiar los JComboBox
+        comboBoxMonedaBase.removeAllItems();
+        comboBoxMonedaDestino.removeAllItems();
+
+        // Agregar las monedas ordenadas a los JComboBox
+        for (String moneda : monedasOrdenadas) {
+            comboBoxMonedaBase.addItem(moneda);
+            comboBoxMonedaDestino.addItem(moneda);
         }
+    }
+
+    // Método para obtener el código de la moneda seleccionada
+    private static String obtenerCodigoMoneda(String nombreMoneda) {
+        return codigoMonedaMap.get(nombreMoneda);
     }
 
     // Método para realizar la conversión de moneda
@@ -89,12 +268,15 @@ public class Principal {
         String monedaDestino = comboBoxMonedaDestino.getSelectedItem().toString(); // Obtener la moneda destino seleccionada
         double cantidad = Double.parseDouble(textFieldCantidad.getText()); // Obtener la cantidad ingresada por el usuario
 
+        String codigoMonedaBase = obtenerCodigoMoneda(monedaBase); // Obtener el código de la moneda base
+        String codigoMonedaDestino = obtenerCodigoMoneda(monedaDestino); // Obtener el código de la moneda destino
+
         ConsultaInfoMoneda consultaInfoMoneda = new ConsultaInfoMoneda();
-        Conversor conversor = consultaInfoMoneda.buscaMoneda(monedaBase); // Obtener tasas de cambio para la moneda base
+        Conversor conversor = consultaInfoMoneda.buscaMoneda(codigoMonedaBase); // Obtener tasas de cambio para la moneda base
 
         if (conversor != null) {
-            if (conversor.getConversionRates().containsKey(monedaDestino)) {
-                double tasaCambio = conversor.getConversionRates().get(monedaDestino);
+            if (conversor.getConversionRates().containsKey(codigoMonedaDestino)) {
+                double tasaCambio = conversor.getConversionRates().get(codigoMonedaDestino);
                 double resultado = cantidad * tasaCambio;
 
                 JOptionPane.showMessageDialog(null, String.format("%.2f %s equivale a %.2f %s", cantidad, monedaBase, resultado, monedaDestino));

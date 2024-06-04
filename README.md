@@ -34,9 +34,9 @@ Usa los menús desplegables para seleccionar la moneda base y la moneda destino.
 
 Ejemplo: Selecciona "USD - Dólar estadounidense" como moneda base y "COP - Peso Colombiano" como moneda destino.
 
-![Seleccionar Monedas](img/Menu.PNG)
+![Seleccionar Monedas](https://github.com/Felipe-Villalobos/ConversorDeMonedas/blob/main/img/Menu.PNG?raw=true)
 
-![Seleccionar Monedas](img/USD_COP.PNG)
+![Seleccionar Monedas](https://github.com/Felipe-Villalobos/ConversorDeMonedas/blob/main/img/USD_COP.PNG?raw=true)
 
 ### Ingresar Cantidad
 
@@ -44,13 +44,13 @@ Introduce la cantidad de la moneda base que deseas convertir en el campo de text
 
 Ejemplo: Ingresa "100" en el campo de texto "Cantidad".
 
-![Ingresar Cantidad](img/100.PNG)
+![Ingresar Cantidad](https://github.com/Felipe-Villalobos/ConversorDeMonedas/blob/main/img/100.PNG?raw=true)
 
 ### Convertir Moneda
 
 Haz clic en el botón "Convertir" para realizar la conversión. Si ingresaste "100" y seleccionaste USD a COP, aparecerá un cuadro de diálogo con el resultado de la conversión.
 
-![Convertir Moneda](img/conversion.PNG)
+![Convertir Moneda](https://github.com/Felipe-Villalobos/ConversorDeMonedas/blob/main/img/Conversion.PNG?raw=true)
 
 ### Debes tener presente
 
@@ -60,16 +60,16 @@ Haz clic en el botón "Convertir" para realizar la conversión. Si ingresaste "1
 
 - Si ingresas en el campo "Cantidad" un valor no numérico (por ejemplo, "abc"), aparecerá un cuadro de error con el mensaje "Por favor, ingresa solo números y la coma para decimales".
 
-![Convertir Moneda](img/ErrorCaracteres.PNG)
+![ErrorCaracteres](https://github.com/Felipe-Villalobos/ConversorDeMonedas/blob/main/img/ErrorCaracteres.PNG?raw=true)
 
 ### Mostrar Historial
 
 Si deseas ver el historial de las conversiones realizadas, haz clic en el botón "Mostrar Historial" para ver las conversiones realizadas anteriormente en el área de texto.
 
-![Mostrar Historial](..img/MostrarHistorial.PNG)
+![Mostrar Historial](https://github.com/Felipe-Villalobos/ConversorDeMonedas/blob/main/img/MostrarHistorial.PNG?raw=true)
 
 ### Ocultar Historial
 
 Si ya no deseas ver el historial de las conversiones realizadas, haz clic en el botón "Ocultar Historial". El área de texto se vaciará y no mostrará ninguna conversión anterior. Ten presente que esta acción no borrará los registros.
 
-![Ocultar Historial](img/Ocultar_Historial.PNG)
+![Ocultar Historial](https://github.com/Felipe-Villalobos/ConversorDeMonedas/blob/main/img/Ocultar_Historial.PNG?raw=true)

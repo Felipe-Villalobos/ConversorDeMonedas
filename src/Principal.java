@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
@@ -230,20 +231,44 @@ public class Principal {
         gbc.gridy = 3;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.NONE;
+
+        frame.setLocationRelativeTo(null);
+
+        frame.setVisible(true);
+
         // Manejador de eventos para el botón de conversión
         buttonConvertir.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Verificar si el campo de cantidad está vacío
-                if (textFieldCantidad.getText().isEmpty()) {
-                    // Mostrar mensaje de error solicitando ingresar un valor
-                    JOptionPane.showMessageDialog(null, "Por favor, ingresa un valor en el campo de cantidad.", "Error", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    // Si el campo de cantidad no está vacío, realizar la conversión
+                try {
+                    // Verificar si el campo de cantidad está vacío
+                    if (textFieldCantidad.getText().trim().isEmpty()) {
+                        // Mostrar mensaje de advertencia y salir del método
+                        JOptionPane.showMessageDialog(null, "Por favor, ingresa un valor en el campo de cantidad.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+
+                    // Verificar si el texto ingresado contiene solo números y la coma como separador decimal
+                    String cantidadText = textFieldCantidad.getText();
+                    if (!cantidadText.matches("^\\d+(\\.\\d+)?$")) {
+                        // Mostrar mensaje de error si el formato no es válido
+                        JOptionPane.showMessageDialog(null, "Por favor, ingresa solo números y la coma para decimales.", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    // Si el campo de cantidad no está vacío y tiene un formato válido, realizar la conversión
                     convertirMoneda();
+                } catch (NumberFormatException ex) {
+                    // Capturar excepción si el valor ingresado no es un número
+                    JOptionPane.showMessageDialog(null, "El valor ingresado no es válido.", "Error", JOptionPane.ERROR_MESSAGE);
+                } catch (Exception ex) {
+                    // Capturar cualquier otra excepción no prevista
+                    JOptionPane.showMessageDialog(null, "Ocurrió un error inesperado.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
+
+
         panelPrincipal.add(buttonConvertir, gbc);
 
         JButton buttonMostrarHistorial = new JButton("Mostrar Historial");
@@ -254,6 +279,7 @@ public class Principal {
             @Override
             public void actionPerformed(ActionEvent e) {
                 historialConversiones.mostrarHistorial(); // Mostrar el historial de conversiones
+
             }
         });
         panelPrincipal.add(buttonMostrarHistorial, gbc);

@@ -26,7 +26,7 @@ Este programa te permite convertir fácilmente cantidades de una moneda a otra. 
 
 Al ejecutar el programa, aparecerá una ventana titulada "Conversor de Monedas".
 
-![Ventana Principal](img/Principal.png)
+![Principal](https://github.com/Felipe-Villalobos/ConversorDeMonedas/blob/main/img/Principal.PNG?raw=true)
 
 ### Seleccionar Monedas
 
@@ -34,9 +34,9 @@ Usa los menús desplegables para seleccionar la moneda base y la moneda destino.
 
 Ejemplo: Selecciona "USD - Dólar estadounidense" como moneda base y "COP - Peso Colombiano" como moneda destino.
 
-![Seleccionar Monedas](img/menu.png)
+![Seleccionar Monedas](img/Menu.PNG)
 
-![Seleccionar Monedas](img/USD_COP.png)
+![Seleccionar Monedas](img/USD_COP.PNG)
 
 ### Ingresar Cantidad
 
@@ -44,29 +44,29 @@ Introduce la cantidad de la moneda base que deseas convertir en el campo de text
 
 Ejemplo: Ingresa "100" en el campo de texto "Cantidad".
 
-![Ingresar Cantidad](img/100.png)
+![Ingresar Cantidad](img/100.PNG)
 
 ### Convertir Moneda
 
 Haz clic en el botón "Convertir" para realizar la conversión. Si ingresaste "100" y seleccionaste USD a COP, aparecerá un cuadro de diálogo con el resultado de la conversión.
 
-![Convertir Moneda](img/conversion.png)
+![Convertir Moneda](img/conversion.PNG)
 
 ### Debes tener presente
 
 - Si haces clic en el botón "Convertir" sin ingresar ningún valor en el campo de "Cantidad", aparecerá un cuadro de advertencia con el mensaje "Por favor, ingresa un valor en el campo de cantidad".
 
-![Convertir Moneda](img/advertencia.png)
+![Convertir Moneda](img/advertencia.PNG)
 
 - Si ingresas en el campo "Cantidad" un valor no numérico (por ejemplo, "abc"), aparecerá un cuadro de error con el mensaje "Por favor, ingresa solo números y la coma para decimales".
 
-![Convertir Moneda](img/ErrorCaracteres.png)
+![Convertir Moneda](img/ErrorCaracteres.PNG)
 
 ### Mostrar Historial
 
 Si deseas ver el historial de las conversiones realizadas, haz clic en el botón "Mostrar Historial" para ver las conversiones realizadas anteriormente en el área de texto.
 
-![Mostrar Historial](img/MostrarHistorial.png)
+![Mostrar Historial](..img/MostrarHistorial.PNG)
 
 ### Ocultar Historial
 

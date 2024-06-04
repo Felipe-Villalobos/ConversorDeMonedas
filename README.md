@@ -56,7 +56,7 @@ Haz clic en el botón "Convertir" para realizar la conversión. Si ingresaste "1
 
 - Si haces clic en el botón "Convertir" sin ingresar ningún valor en el campo de "Cantidad", aparecerá un cuadro de advertencia con el mensaje "Por favor, ingresa un valor en el campo de cantidad".
 
-![Convertir Moneda](img/advertencia.PNG)
+![Convertir Advertencia](https://github.com/Felipe-Villalobos/ConversorDeMonedas/blob/main/img/Advertencia.PNG?raw=true)
 
 - Si ingresas en el campo "Cantidad" un valor no numérico (por ejemplo, "abc"), aparecerá un cuadro de error con el mensaje "Por favor, ingresa solo números y la coma para decimales".
 

@@ -199,7 +199,7 @@ public class Principal {
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         // Componentes gráficos: etiquetas, menús desplegables, campo de texto y botones
-        JLabel labelMonedaBase = new JLabel("Moneda Base:");
+        JLabel labelMonedaBase = new JLabel("Moneda Origen:");
         gbc.gridx = 0;
         gbc.gridy = 0;
         panelPrincipal.add(labelMonedaBase, gbc);
